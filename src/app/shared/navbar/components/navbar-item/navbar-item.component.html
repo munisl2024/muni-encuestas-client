@@ -1,0 +1,26 @@
+<!-- Item -->
+
+@if (item.nombre !== 'Cerrar sesion') {
+<li routerLinkActive="bg-secondaryColor rounded" [routerLink]="['/dashboard',item.ruta]"
+  class="flex transform hover:translate-x-2 duration-500 items-center outline-none cursor-pointer p-2">
+
+  <svg *ngIf="item.nombre === 'Home'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+    stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+  </svg>
+
+  <a class="ml-2 mt-1"> {{ item.nombre }} </a>
+
+</li>
+}@else {
+<li (click)="logout()"
+  class="flex outline-none transform hover:translate-x-2 duration-500 items-center cursor-pointer p-2">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+    class="w-5 h-5">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+  </svg>
+  <a class="ml-2 mt-1"> Cerrar sesion </a>
+</li>
+}

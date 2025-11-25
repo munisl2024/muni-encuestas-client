@@ -1,0 +1,33 @@
+<app-modal 
+  [showModal]="barriosService.showModalAbm" 
+  (closeModal)="cerrarModal()"
+  [titulo]="barriosService.estadoAbm === 'crear' ? 'Nuevo Barrio' : 'Editar Barrio'"
+  [urlIcono]="'assets/svg/barrios.svg'"
+  [estadoFormulario]="barriosService.estadoAbm"
+  [textoCrear]="'Crear barrio'"
+  [textoActualizar]="'Actualizar barrio'"
+  (closeModal)="cerrarModal()"
+  (crear)="onSubmit()"
+  (actualizar)="onSubmit()"
+  >
+
+  <form (ngSubmit)="onSubmit()" class="space-y-6">
+    
+    <!-- Campo Descripción -->
+    <div class="p-4">
+      <label for="descripcion" class="label-general">
+        Descripción <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        id="descripcion"
+        name="descripcion"
+        [(ngModel)]="barriosService.abmForm.descripcion"
+        required
+        class="w-full px-3 mt-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+        placeholder="Ingrese la descripción del barrio"
+        maxlength="100">
+    </div>
+  </form>
+
+</app-modal>

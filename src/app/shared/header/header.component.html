@@ -1,0 +1,67 @@
+<div class="relative z-0 lg:flex-grow">
+  <header class="bg-gradient-to-r from-slate-800 via-teal-900 to-emerald-900 shadow-lg flex md:justify-between px-3 py-2">
+
+    <div class="flex items-center container mx-auto justify-between w-full">
+      <div class="flex items-center">
+        <button (click)="dataService.showMenu = true" title="Abrir barra de navegacion"
+          class="p-2 hover:bg-white/10 text-white hover:opacity-90 transition-all outline-none active:scale-90 focus:outline-none items-center rounded-lg">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div class="flex items-center justify-between w-full">
+          <button routerLink="/dashboard/home" class="flex group items-center text-white p-2 hover:bg-white/5 rounded-xl transition-all">
+            <div class="relative">
+              <div class="absolute inset-0 bg-gradient-to-r from-sky-400 to-emerald-400 rounded-xl blur-md opacity-0 group-hover:opacity-60 transition-all duration-300"></div>
+              <img routerLink="/dashboard/home" src="assets/svg/muni-encuestas-icon.svg" class="relative w-10 h-10 group-hover:scale-110 group-hover:rotate-6 transition-all cursor-pointer" alt="Muni-Encuestas Logo">
+            </div>
+            <div class="ml-3 flex flex-col items-start">
+              <div class="group-hover:text-sky-200 font-bold text-base tracking-tight transition-colors">Muni-Encuestas</div>
+              <div class="text-xs text-emerald-300 font-medium">Sistema Municipal</div>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-2">
+        <button routerLink="/dashboard/encuestas" title="Encuestas" class="p-2.5 bg-white/10 backdrop-blur-sm border border-emerald-400/30 rounded-xl hover:bg-emerald-500/20 hover:border-emerald-400 hover:-translate-y-1 transition-all group">
+          <img src="assets/svg/encuestas.svg" class="w-6 h-6 group-hover:scale-110 transition-transform">
+        </button>
+        <button *ngIf="authService.isAdmin" routerLink="/dashboard/barrios" title="Barrios" class="p-2.5 bg-white/10 backdrop-blur-sm border border-emerald-400/30 rounded-xl hover:bg-emerald-500/20 hover:border-emerald-400 hover:-translate-y-1 transition-all group">
+          <img src="assets/svg/barrios.svg" class="w-6 h-6 group-hover:scale-110 transition-transform">
+        </button>
+        <button (click)="logout()" title="Cerrar sesion" class="p-2.5 bg-white/10 backdrop-blur-sm border border-red-400/30 rounded-xl hover:bg-red-500/20 hover:border-red-400 hover:-translate-y-1 transition-all group">
+          <img src="assets/svg/cerrarSesion.svg" class="w-6 h-6 group-hover:scale-110 transition-transform">
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+  <div *ngIf="!showSubMenu" (click)="showSubMenu = !showSubMenu"
+    class="p-2 bg-gradient-to-r from-teal-800 to-emerald-800 cursor-pointer md:hidden text-white flex items-center justify-center shadow-lg hover:from-teal-700 hover:to-emerald-700 transition-all">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+      class="w-4 h-4">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+    </svg>
+  </div>
+
+  <div *ngIf="showSubMenu" (click)="showSubMenu = !showSubMenu"
+    class="p-2 bg-gradient-to-r from-teal-800 to-emerald-800 cursor-pointer md:hidden text-white flex items-center justify-center shadow-lg hover:from-teal-700 hover:to-emerald-700 transition-all">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+      class="w-4 h-4">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+    </svg>
+  </div>
+
+  <div *ngIf="showSubMenu" class="w-full flex md:hidden items-center justify-center p-3 bg-gradient-to-r from-slate-700 via-teal-800 to-emerald-800 gap-3">
+    <button routerLink="/dashboard/encuestas" title="Encuestas" class="p-2.5 bg-white/10 backdrop-blur-sm border border-emerald-400/30 rounded-xl hover:bg-emerald-500/20 hover:border-emerald-400 transition-all group">
+      <img src="assets/svg/encuestas.svg" class="w-7 h-7 group-hover:scale-110 transition-transform">
+    </button>
+    <button routerLink="/dashboard/barrios" title="Barrios" class="p-2.5 bg-white/10 backdrop-blur-sm border border-emerald-400/30 rounded-xl hover:bg-emerald-500/20 hover:border-emerald-400 transition-all group">
+      <img src="assets/svg/barrios.svg" class="w-7 h-7 group-hover:scale-110 transition-transform">
+    </button>
+    <button (click)="logout()" title="Cerrar sesion" class="p-2.5 bg-white/10 backdrop-blur-sm border border-red-400/30 rounded-xl hover:bg-red-500/20 hover:border-red-400 transition-all group">
+      <img src="assets/svg/cerrarSesion.svg" class="w-7 h-7 group-hover:scale-110 transition-transform">
+    </button>
+  </div>
+</div>

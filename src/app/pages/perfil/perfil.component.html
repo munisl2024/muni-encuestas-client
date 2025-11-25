@@ -1,0 +1,101 @@
+<div class="p-6 gsap-contenido w-full max-w-6xl mx-auto md:flex md:space-x-6">
+  <!-- Datos de usuario -->
+  <div class="bg-white w-full md:w-1/2 rounded-lg shadow-lg overflow-hidden">
+    <div class="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+      <h1 class="text-xl font-semibold text-white text-center">Datos de usuario</h1>
+    </div>
+
+    <div *ngIf="usuarioLogin" class="p-6">
+      <!-- Avatar -->
+      <div class="flex flex-col items-center">
+        <div *ngIf="usuarioLogin.role === 'ADMIN_ROLE'"
+          class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center w-28 h-28 shadow-lg">
+          <p class="text-5xl font-bold text-white">A</p>
+        </div>
+        <div *ngIf="usuarioLogin.role === 'USER_ROLE'"
+          class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center w-28 h-28 shadow-lg">
+          <p class="text-5xl font-bold text-white">E</p>
+        </div>
+        <span class="mt-3 px-4 py-1 text-sm font-medium rounded-full"
+          [ngClass]="{'bg-blue-100 text-blue-800': usuarioLogin.role === 'ADMIN_ROLE',
+                      'bg-orange-100 text-orange-800': usuarioLogin.role === 'USER_ROLE'}">
+          {{usuarioLogin.role === 'ADMIN_ROLE' ? 'Usuario administrador' : 'Usuario estándar'}}
+        </span>
+      </div>
+
+      <!-- Datos de usuario -->
+      <div class="mt-6 space-y-4">
+        <div class="text-center">
+          <h3 class="text-lg font-semibold text-gray-800">Apellido y Nombre</h3>
+          <p class="mt-1 capitalize text-gray-600">{{usuarioLogin.apellido.toLowerCase()}} {{usuarioLogin.nombre.toLowerCase()}}</p>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg font-semibold text-gray-800">DNI</h3>
+          <p class="mt-1 text-gray-600">{{usuarioLogin.dni}}</p>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg font-semibold text-gray-800">Correo electrónico</h3>
+          <p class="mt-1 text-gray-600">{{usuarioLogin.email}}</p>
+        </div>
+        <div class="text-center">
+          <h3 class="text-lg font-semibold text-gray-800">Fecha de ingreso</h3>
+          <p class="mt-1 text-gray-600">{{usuarioLogin.createdAt | fecha}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actualizar contraseña -->
+  <div class="w-full md:w-1/2 mt-6 md:mt-0">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div class="bg-gradient-to-r from-gray-800 to-gray-700 px-6 py-4">
+        <h1 class="text-xl font-semibold text-white text-center">Actualizar contraseña</h1>
+      </div>
+
+      <form [formGroup]="passwordForm" (submit)="actualizarPassword()" class="p-6">
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña actual</label>
+            <input formControlName="password_actual"
+                   type="password"
+                   placeholder="Mi contraseña actual"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+            <p *ngIf="password_actual.touched && password_actual?.errors?.['required']"
+               class="mt-1 text-sm text-red-600">La contraseña es obligatoria</p>
+            <p *ngIf="password_actual.touched && password_actual?.errors?.['minlength']"
+               class="mt-1 text-sm text-red-600">Debe tener como mínimo {{password_actual?.errors?.['minlength'].requiredLength}} caracteres</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nueva contraseña</label>
+            <input formControlName="password_nuevo"
+                   type="password"
+                   placeholder="Ingresar nueva contraseña"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+            <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['required']"
+               class="mt-1 text-sm text-red-600">La contraseña es obligatoria</p>
+            <p *ngIf="password_nuevo.touched && password_nuevo?.errors?.['minlength']"
+               class="mt-1 text-sm text-red-600">Debe tener como mínimo {{password_nuevo?.errors?.['minlength'].requiredLength}} caracteres</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Repetir contraseña</label>
+            <input formControlName="password_nuevo_repetir"
+                   type="password"
+                   placeholder="Repite la nueva contraseña"
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+            <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['required']"
+               class="mt-1 text-sm text-red-600">La contraseña es obligatoria</p>
+            <p *ngIf="password_nuevo_repetir.touched && password_nuevo_repetir?.errors?.['minlength']"
+               class="mt-1 text-sm text-red-600">Debe tener como mínimo {{password_nuevo_repetir?.errors?.['minlength'].requiredLength}} caracteres</p>
+          </div>
+        </div>
+
+        <button (click)="actualizarPassword()"
+                class="w-full mt-6 px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
+          Actualizar contraseña
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

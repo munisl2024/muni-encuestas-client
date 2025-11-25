@@ -1,0 +1,37 @@
+/* Estilos para Drag & Drop de Angular CDK */
+
+/* Contenedor de drop */
+.cdk-drop-list {
+  display: block;
+}
+
+/* Elemento siendo arrastrado */
+.cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  cursor: move;
+}
+
+/* Elemento mientras se arrastra */
+.cdk-drag-preview {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  opacity: 0.9;
+  border-radius: 0.5rem;
+}
+
+/* Placeholder donde se soltará el elemento */
+.cdk-drag-placeholder {
+  opacity: 0.4;
+  background: #f3f4f6;
+  border: 2px dashed #9ca3af;
+  border-radius: 0.5rem;
+}
+
+/* Animación al soltar */
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Cuando está siendo arrastrado encima */
+.cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

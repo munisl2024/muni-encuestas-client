@@ -1,0 +1,255 @@
+<app-abm-barrios (insertEvent)="nuevoBarrio($event)" (updateEvent)="actualizarBarrio($event)" />
+
+<!-- Listado de barrios -->
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <app-tarjeta-lista>
+    <div class="container mx-auto pb-6">
+
+      <!-- Header -->
+      <div class="header-tabla">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div class="flex items-center text-white">
+            <div class="bg-white rounded p-2">
+              <img src="assets/svg/barrios.svg" class="w-10 md:w-14 transition-transform hover:scale-110">
+            </div>
+            <div class="ml-3 md:ml-4">
+              <h2 class="titulo-tabla text-lg md:text-xl"> Listado de barrios </h2>
+              <p class="subtitulo-tabla text-sm md:text-base">Total: {{ totalItems }}</p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center mt-4 md:mt-0 space-y-2 sm:space-y-0 sm:space-x-3">
+
+            <!-- Input oculto para importar KML -->
+            <input #fileInput type="file" accept=".kml" (change)="onFileSelected($event)" class="hidden"
+              [disabled]="importandoKml">
+
+            <!-- Dropdown de Acciones -->
+            <div class="relative">
+              <button (click)="toggleDropdownAcciones()"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 shadow-md transition-all duration-200 w-full sm:w-auto"
+                title="Acciones">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+                <span class="font-medium text-sm md:text-base">Acciones</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                  class="w-4 h-4 transition-transform duration-200"
+                  [class.rotate-180]="dropdownAccionesAbierto">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+
+              <!-- Menú Dropdown -->
+              <div *ngIf="dropdownAccionesAbierto"
+                (click)="cerrarDropdownAcciones()"
+                class="fixed inset-0 z-10"
+                (click)="cerrarDropdownAcciones()">
+              </div>
+
+              <div *ngIf="dropdownAccionesAbierto"
+                class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden">
+
+                <!-- Opción: Nuevo Barrio -->
+                <!-- <button *ngIf="authService.isAdmin" [routerLink]="['/dashboard/barrios/crear']"
+                  (click)="cerrarDropdownAcciones()"
+                  class="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150 border-b border-gray-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-green-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span class="font-medium text-gray-700">Nuevo barrio</span>
+                </button> -->
+
+                <!-- Opción: Geolocalización -->
+                <button [routerLink]="['/dashboard/barrios/geolocalizacion']"
+                  (click)="cerrarDropdownAcciones()"
+                  class="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150 border-b border-gray-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  <span class="font-medium text-gray-700">Geolocalización</span>
+                </button>
+
+                <!-- Opción: Importar KML (solo para admin) -->
+                <button *ngIf="authService.usuario.role === 'ADMIN_ROLE'"
+                  (click)="fileInput.click(); cerrarDropdownAcciones()"
+                  [disabled]="importandoKml"
+                  class="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-600">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                  </svg>
+                  <span class="font-medium text-gray-700">
+                    {{ importandoKml ? 'Importando...' : 'Importar KML' }}
+                  </span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="bg-white px-6 py-4 border-b">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <select [(ngModel)]="filtro.activo" (change)="filtrarActivos($event)" class="input-tabla">
+            <option value='true'>Activos</option>
+            <option value='false'>Inactivos</option>
+            <option value=''>Todos</option>
+          </select>
+          <div class="flex items-center w-full">
+            <div class="relative flex-grow">
+              <input #buscadorBarrios [(ngModel)]="filtro.parametro" placeholder="Buscar barrio..."
+                class="input-tabla-buscador w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primaryColor focus:border-primaryColor transition-all duration-200" />
+              <div *ngIf="!buscandoBarrios"
+                class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <div *ngIf="buscandoBarrios" class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-400"></div>
+              </div>
+            </div>
+          </div>
+          <select (change)="filtrarParametro($event)" [(ngModel)]="cantidadItems" class="input-tabla">
+            <option value="10">10 elementos</option>
+            <option value="20">20 elementos</option>
+            <option value="50">50 elementos</option>
+            <option value="100">100 elementos</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabla Desktop -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr>
+              <th class="th-tabla">
+                <div (click)="ordenarPorColumna('descripcion')" class="group cursor-pointer flex items-center">
+                  <span>Descripción</span>
+                  <span class="ml-2 text-gray-400 group-hover:text-gray-600">
+                    <svg *ngIf="ordenar.columna === 'descripcion'" class="w-4 h-4" fill="currentColor"
+                      viewBox="0 0 20 20">
+                      <path *ngIf="ordenar.direccion === 'asc'" fill-rule="evenodd"
+                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                      <path *ngIf="ordenar.direccion === 'desc'" fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </div>
+              </th>
+              <th class="th-tabla">
+                <div (click)="ordenarPorColumna('createdAt')" class="group cursor-pointer flex items-center">
+                  <span>Fecha Creación</span>
+                  <span class="ml-2 text-gray-400 group-hover:text-gray-600">
+                    <svg *ngIf="ordenar.columna === 'createdAt'" class="w-4 h-4" fill="currentColor"
+                      viewBox="0 0 20 20">
+                      <path *ngIf="ordenar.direccion === 'asc'" fill-rule="evenodd"
+                        d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
+                        clip-rule="evenodd" />
+                      <path *ngIf="ordenar.direccion === 'desc'" fill-rule="evenodd"
+                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </div>
+              </th>
+              <th *ngIf="authService.isAdmin" class="th-tabla">Estado</th>
+              <th class="th-tabla flex items-cente justify-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @for(barrio of barriosService.barrios | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual,
+            totalItems:totalItems}; track barrio.id){
+            <tr [ngClass]="{'bg-red-50': !barrio.activo}" class="hover:bg-gray-50 transition duration-150">
+              <td class="td-tabla">
+                <div class="flex items-center">
+                  <div class="text-sm font-medium text-gray-900">{{ barrio.descripcion }}</div>
+                </div>
+              </td>
+              <td class="td-tabla">
+                <div class="text-sm text-gray-900">{{ barrio.createdAt | date:'dd/MM/yyyy' }}</div>
+              </td>
+              <td *ngIf="authService.isAdmin" class="td-tabla">
+                <app-pastilla-estado (click)="cambiarEstado(barrio)" [activo]="barrio.activo"></app-pastilla-estado>
+              </td>
+              <td class="td-tabla">
+                <div class="flex items-center justify-center space-x-2">
+                  <!-- <button *ngIf="authService.isAdmin" (click)="abrirAbm('editar', barrio)" class="boton-tabla-editar" title="Editar barrio">
+                    <img src="assets/svg/editar.svg" class="w-4 h-4">
+                    <span class="ml-2 font-medium"> Editar </span>
+                  </button> -->
+                  <button [routerLink]="['/dashboard/barrios/detalles', barrio.id]" class="boton-tabla-detalles"
+                    title="Ver detalles del barrio">
+                    <img src="assets/svg/detalles.svg" class="w-4 h-4">
+                    <span class="ml-2 font-medium"> Detalles </span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            }@empty {
+            <tr>
+              <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500 bg-gray-50">
+                No se encontraron barrios
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Vista Móvil -->
+      <div class="md:hidden space-y-4 p-4 max-h-[500px] overflow-y-auto">
+        @for(barrio of barriosService.barrios | paginate: {itemsPerPage: cantidadItems, currentPage: paginaActual,
+        totalItems:totalItems}; track barrio.id){
+        <div
+          class="bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300 barrio-tarjeta">
+          <div [class]="barrio.activo ? 'border-l-4 border-blue-500 p-5' : 'border-l-4 border-red-500 p-5'">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-lg text-gray-900">{{ barrio.descripcion }}</div>
+                <div class="text-sm text-gray-500 mt-1 flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {{ barrio.createdAt | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 flex items-center justify-end space-x-2">
+              <app-pastilla-estado *ngIf="authService.isAdmin" [activo]="barrio.activo" (click)="cambiarEstado(barrio)"
+                class="transform hover:scale-105 transition-transform duration-200"></app-pastilla-estado>
+              <button *ngIf="authService.isAdmin" (click)="abrirAbm('editar', barrio)" class="boton-tabla-editar">
+                <img src="assets/svg/editar.svg" class="w-4 h-4">
+                <span class="ml-2 font-medium"> Editar </span>
+              </button>
+              <button [routerLink]="['/dashboard/barrios/detalles', barrio.id]" class="boton-tabla-detalles">
+                <img src="assets/svg/detalles.svg" class="w-4 h-4">
+                <span class="ml-2 font-medium"> Detalles </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        }@empty {
+        <div class="text-center py-4 text-gray-500 bg-gray-50 rounded-lg">
+          No se encontraron barrios
+        </div>
+        }
+      </div>
+
+      <!-- Paginación -->
+      <div
+        class="px-5 py-5 mt-4 text-sm bg-white border-t flex shadow flex-col xs:flex-row items-center xs:justify-between">
+        <pagination-controls nextLabel="Siguiente" previousLabel="Anterior"
+          (pageChange)="cambiarPagina($event)"></pagination-controls>
+      </div>
+
+    </div>
+  </app-tarjeta-lista>
+</div>

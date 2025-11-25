@@ -1,0 +1,44 @@
+<app-modal
+  [showModal]="preguntasService.abmPregunta.show"
+  [titulo]="preguntasService.abmPregunta.estado == 'crear' ? 'Creando pregunta' : 'Editando pregunta'"
+  [urlIcono]="'assets/svg/preguntas.svg'"
+  [estadoFormulario]="preguntasService.abmPregunta.estado"
+  [textoCrear]="'Crear pregunta'"
+  [textoActualizar]="'Actualizar pregunta'"
+  [showFooter]="true"
+  (closeModal)="preguntasService.abmPregunta.show = false"
+  (crear)="crearPregunta()"
+  (actualizar)="actualizarPregunta()"
+  >
+  <div class="bg-white rounded-lg shadow-xl">
+
+    <!-- Contenido -->
+    <div class="p-6 max-h-96 overflow-y-auto">
+        
+        <div>
+            <label for="descripcion" class="label-generico">Descripción <span class="text-red-500">*</span></label>
+            <input type="text" id="descripcion" class="input-generico mt-2"
+                placeholder="Ingrese aqui su pregunta" [(ngModel)]="preguntasService.abmPregunta.form.descripcion" />
+        </div>
+
+        <div class="mt-3">
+            <p for="descripcion" class="label-generico"> Preguntas <span class="text-red-500">*</span></p>
+            <div class="mb-1" *ngFor="let respuesta of preguntasService.abmPregunta.form.respuestas; let i = index">
+                <div class="flex items-center gap-2">
+                    <input type="text" class="border-b border-gray-200 text-sm w-full p-2 mt-2"
+                        placeholder="Ingrese aqui su respuesta" [(ngModel)]="respuesta.descripcion" />
+                    <button (click)="eliminarRespuesta(i)" type="button" class="bg-red-500 text-white rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                          </svg>                          
+                    </button>
+                </div>
+            </div>
+            <button (click)="agregarRespuestas()" class="text-xs p-2 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded-lg mt-2">
+                Agregar respuesta
+            </button>
+        </div>
+
+    </div>
+  </div>
+</app-modal>

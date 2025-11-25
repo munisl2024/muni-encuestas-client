@@ -1,0 +1,218 @@
+/* Estilos específicos para dispositivos móviles */
+@media (max-width: 768px) {
+  /* Ajustes del header */
+  .header-tabla {
+    padding: 1rem;
+  }
+  
+  .titulo-tabla {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  
+  .subtitulo-tabla {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  /* Ajustes de los botones del header */
+  .header-tabla button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Ajustes de los filtros */
+  .input-tabla {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  /* Ajustes de la tabla */
+  .th-tabla {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .td-tabla {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Ajustes de los botones de acción */
+  .boton-tabla-editar,
+  .boton-tabla-detalles {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Ajustes de la paginación */
+  pagination-controls {
+    font-size: 0.875rem;
+  }
+  
+  pagination-controls .ngx-pagination li {
+    margin: 0 0.25rem;
+  }
+  
+  pagination-controls .ngx-pagination a {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Estilos para dispositivos muy pequeños */
+@media (max-width: 480px) {
+  .header-tabla {
+    padding: 0.75rem;
+  }
+  
+  .titulo-tabla {
+    font-size: 1.125rem;
+  }
+  
+  .header-tabla button {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .input-tabla {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
+  
+  .th-tabla,
+  .td-tabla {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.75rem;
+  }
+  
+  .boton-tabla-editar,
+  .boton-tabla-detalles {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.625rem;
+  }
+}
+
+/* Mejoras para la vista móvil */
+.movil-tarjetas {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar personalizado para móviles */
+.movil-tarjetas::-webkit-scrollbar {
+  width: 4px;
+}
+
+.movil-tarjetas::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.movil-tarjetas::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.movil-tarjetas::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Estilos específicos para barrios */
+.barrio-tarjeta {
+  transition: all 0.2s ease-in-out;
+}
+
+.barrio-tarjeta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Estados de barrios */
+.barrio-activo {
+  border-left-color: #3b82f6;
+}
+
+.barrio-inactivo {
+  border-left-color: #ef4444;
+}
+
+/* Botones de acción específicos para barrios */
+.boton-barrio-editar {
+  background-color: #2563eb;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.boton-barrio-editar:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.boton-barrio-detalles {
+  background-color: #4f46e5;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.boton-barrio-detalles:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+/* Animaciones suaves para móviles */
+@media (max-width: 768px) {
+  .header-tabla button,
+  .boton-tabla-editar,
+  .boton-tabla-detalles {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .header-tabla button:active,
+  .boton-tabla-editar:active,
+  .boton-tabla-detalles:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Estilos específicos para barrios */
+.barrio-tarjeta {
+  transition: all 0.2s ease-in-out;
+}
+
+.barrio-tarjeta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Estados de barrios */
+.barrio-activo {
+  border-left-color: #3b82f6;
+}
+
+.barrio-inactivo {
+  border-left-color: #ef4444;
+}
+
+/* Botones de acción específicos para barrios */
+.boton-barrio-editar {
+  background-color: #2563eb;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.boton-barrio-editar:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.boton-barrio-detalles {
+  background-color: #4f46e5;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.boton-barrio-detalles:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}

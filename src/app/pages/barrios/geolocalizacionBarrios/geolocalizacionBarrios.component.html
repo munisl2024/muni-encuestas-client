@@ -1,0 +1,113 @@
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  
+    <!-- Estadísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
+        <div class="flex items-center">
+          <div class="p-2 bg-blue-100 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">Total Barrios</p>
+            <p class="text-2xl font-semibold text-gray-800">{{ obtenerEstadisticas().total }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
+        <div class="flex items-center">
+          <div class="p-2 bg-green-100 rounded-lg">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">Barrios Filtrados</p>
+            <p class="text-2xl font-semibold text-gray-800">{{ obtenerEstadisticas().filtrados }}</p>
+          </div>
+        </div>
+      </div>
+      
+  
+    </div>
+  
+    <!-- Filtro por descripción -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex-1 min-w-[250px]">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            Filtrar por Descripción
+          </label>
+          <select
+            [(ngModel)]="filtroDescripcion"
+            (change)="filtrarPorDescripcion()"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+            <option value="">Todos los barrios</option>
+            <option *ngFor="let descripcion of descripcionesUnicas" [value]="descripcion">
+              {{ descripcion }}
+            </option>
+          </select>
+        </div>
+        <div class="md:mt-5 text-sm text-gray-600">
+          <span class="font-medium">Total:</span> {{ obtenerEstadisticas().total }} |
+          <span class="font-medium">Filtrados:</span> {{ obtenerEstadisticas().filtrados }}
+        </div>
+      </div>
+    </div>
+  
+    <!-- Controles del mapa -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+      <div class="flex flex-wrap gap-3">
+        <button
+          (click)="mostrarTodosLosBarrios()"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200 flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+          </svg>
+          Mostrar Todos
+        </button>
+        
+  
+      </div>
+    </div>
+  
+    <!-- Mapa -->
+    <div class="bg-white rounded-lg shadow overflow-hidden border-2 border-gray-200">
+      <div class="p-4 bg-gray-800">
+        <h2 class="text-xl font-bold text-white flex items-center">
+          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+          </svg>
+          Mapa de Barrios Geolocalizados
+        </h2>
+        <p class="text-blue-100 text-sm mt-1">
+          Visualización de todos los barrios con sus delimitaciones geográficas
+        </p>
+      </div>
+      <div id="mapaBarrios" class="w-full h-[500px] sm:h-[600px] lg:h-[700px]"></div>
+    </div>
+  
+    <!-- Información adicional -->
+    <div class="mt-6 bg-white rounded-lg shadow p-4">
+      <h3 class="text-lg font-semibold text-gray-800 mb-3">Información del Mapa</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+        <div>
+          <p><strong>•</strong> Haz clic en un polígono para ver la información del barrio</p>
+          <p><strong>•</strong> Usa el filtro para mostrar solo barrios específicos</p>
+          <p><strong>•</strong> Zoom y pan para navegar por el mapa</p>
+        </div>
+        <div>
+          <p><strong>•</strong> Barrios con coordenadas: {{ obtenerEstadisticas().conCoordenadas }}</p>
+          <p><strong>•</strong> Los popups muestran nombre, estado e información del barrio</p>
+          <p><strong>•</strong> Efectos visuales al pasar el mouse sobre los polígonos</p>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  

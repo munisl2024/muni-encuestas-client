@@ -1,0 +1,67 @@
+<app-modal
+  [showModal]="encuestasService.abmEncuesta.show"
+  [titulo]="encuestasService.abmEncuesta.estado == 'crear' ? 'Creando encuesta' : 'Editando encuesta'"
+  [urlIcono]="'assets/svg/encuestas.svg'"
+  [estadoFormulario]="encuestasService.abmEncuesta.estado"
+  [textoCrear]="'Crear encuesta'"
+  [textoActualizar]="'Actualizar encuesta'"
+  [showFooter]="true"
+  (closeModal)="encuestasService.abmEncuesta.show = false"
+  (crear)="nuevaEncuesta()"
+  (actualizar)="actualizarEncuesta()"
+  >
+  <div class="bg-white rounded-lg shadow-xl">
+
+    <!-- Contenido -->
+    <div class="p-6 max-h-96 overflow-y-auto">
+      <div class="space-y-4">
+        
+        <!-- Título de la Encuesta -->
+        <div>
+          <label class="label-generico mb-1">
+            Título <span class="text-red-500">*</span>
+          </label>
+          <input type="text" (keyup.enter)="submit()" [(ngModel)]="encuestasService.abmEncuesta.form.titulo"
+            class="input-generico mt-1"
+            placeholder="Ej. Encuesta de Satisfacción">
+        </div>
+
+        <div>
+          <!-- Descripción -->
+          <div>
+            <label class="label-generico mb-1">
+              Descripción
+            </label>
+            <input type="text" (keyup.enter)="submit()" [(ngModel)]="encuestasService.abmEncuesta.form.descripcion"
+              class="input-generico mt-1"
+              placeholder="Ej. Esta encuesta busca evaluar...">
+          </div>
+
+        </div>
+
+        <!-- Info adicional en edición -->
+        <div *ngIf="encuestasService.abmEncuesta.encuestaSeleccionada && encuestasService.abmEncuesta.estado === 'editar'"
+          class="grid md:grid-cols-2 gap-4 mt-4">
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-300">
+            <div class="flex items-center">
+              <h3 class="text-sm font-semibold text-gray-700">Fecha de alta</h3>
+            </div>
+            <p class="text-sm text-gray-600 mt-1">
+              {{ encuestasService.abmEncuesta.encuestaSeleccionada.createdAt | date:'dd/MM/yyyy' }}
+            </p>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-300">
+            <div class="flex items-center">
+              <h3 class="text-sm font-semibold text-gray-700">Usuario creador</h3>
+            </div>
+            <p class="text-sm text-gray-600 mt-1 capitalize">
+              {{ encuestasService.abmEncuesta.encuestaSeleccionada.creatorUser.apellido.toLowerCase() }}
+              {{ encuestasService.abmEncuesta.encuestaSeleccionada.creatorUser.nombre.toLowerCase() }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>

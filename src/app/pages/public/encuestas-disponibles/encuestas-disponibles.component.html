@@ -1,0 +1,181 @@
+<!-- Fondo moderno con gradiente -->
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-emerald-900 relative overflow-hidden">
+
+  <!-- Patrón animado de fondo -->
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute top-0 left-0 w-96 h-96 bg-sky-400 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+  </div>
+
+  <!-- Grid pattern sutil -->
+  <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-5"></div>
+
+  <!-- Header con glassmorphism -->
+  <div class="relative z-10">
+    <div class="bg-white/10 backdrop-blur-xl border-b-2 border-white/20 shadow-xl">
+      <div class="max-w-7xl mx-auto px-4 py-4 md:flex md:items-center md:justify-between">
+
+        <!-- Logo y usuario -->
+        <div class="flex items-center gap-4">
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gradient-to-r from-sky-400 to-emerald-400 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-all duration-300"></div>
+            <div class="relative w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border-2 border-white/30">
+              <img src="assets/svg/muni-encuestas-icon.svg" class="w-10 h-10 group-hover:scale-110 group-hover:rotate-6 transition-all" alt="Logo">
+            </div>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-sky-200 to-emerald-200 bg-clip-text text-transparent">
+              Encuestas Disponibles
+            </h1>
+            <p class="text-white/70 text-sm capitalize" *ngIf="authService.usuario">
+              {{ authService.usuario.apellido.toLowerCase() }}, {{ authService.usuario.nombre.toLowerCase() }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Botón cerrar sesión -->
+        <button (click)="cerrarSesion()"
+          class="flex items-center ml-auto md:ml-0 gap-2 mt-4 md:mt-0 px-4 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 border-2 border-red-500/50 hover:border-red-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+          </svg>
+          <span class="font-semibold">Cerrar sesión</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Título de la sección -->
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-sky-200 via-teal-200 to-emerald-200 bg-clip-text text-transparent mb-3">
+        Selecciona una encuesta
+      </h2>
+      <p class="text-white/70 text-lg">Elige la encuesta que deseas completar</p>
+
+      <!-- Badge con número de encuestas -->
+      <div class="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+        <span class="text-white/80 text-sm font-medium">{{ encuestas.length }} encuesta{{ encuestas.length !== 1 ? 's' : '' }} disponible{{ encuestas.length !== 1 ? 's' : '' }}</span>
+      </div>
+    </div>
+
+    <!-- Grid de encuestas -->
+    <div *ngIf="encuestas.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for(encuesta of encuestas; track encuesta.id){
+        <a [routerLink]="['/public/encuesta', encuesta.id]"
+          class="group relative">
+
+          <!-- Efecto glow -->
+          <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-all duration-500"></div>
+
+          <!-- Tarjeta -->
+          <div class="relative h-full bg-white/10 backdrop-blur-md rounded-2xl border-2 border-white/20 p-6 shadow-xl group-hover:shadow-2xl group-hover:shadow-emerald-500/30 group-hover:-translate-y-2 group-hover:border-emerald-400/50 transition-all duration-500 overflow-hidden cursor-pointer">
+
+            <!-- Patrón decorativo -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-transparent rounded-full blur-2xl"></div>
+
+            <!-- Contenido -->
+            <div class="relative flex flex-col h-full">
+
+              <!-- Header con ícono -->
+              <div class="flex items-start gap-4 mb-4">
+                <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                  </svg>
+                </div>
+
+                <!-- Badge estado -->
+                <div class="flex-1 flex justify-end">
+                  <span class="px-3 py-1 bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 text-xs font-bold rounded-full backdrop-blur-sm">
+                    ACTIVA
+                  </span>
+                </div>
+              </div>
+
+              <!-- Título y descripción -->
+              <div class="flex-1 mb-4">
+                <h3 class="text-xl font-bold text-white mb-3 group-hover:text-emerald-200 transition-colors line-clamp-2">
+                  {{ encuesta.titulo }}
+                </h3>
+                <p class="text-white/60 text-sm leading-relaxed line-clamp-3">
+                  {{ encuesta.descripcion }}
+                </p>
+              </div>
+
+              <!-- Footer con info -->
+              <div class="space-y-3 pt-4 border-t border-white/10">
+
+                <!-- Número de preguntas -->
+                <div class="flex items-center gap-2 text-white/70">
+                  <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-sm font-medium">{{ encuesta.Preguntas?.length || 0 }} preguntas</span>
+                </div>
+
+                <!-- Fecha límite si existe -->
+                <div *ngIf="encuesta.programacionActiva" class="flex items-center gap-2 text-orange-300">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-xs font-medium">Hasta: {{ encuesta.programacionActiva.fechaFin | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+
+                <!-- Sin límite de tiempo -->
+                <div *ngIf="!encuesta.programacionActiva && encuesta.estado === 'Activa'" class="flex items-center gap-2 text-sky-300">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-xs font-medium">Sin límite de tiempo</span>
+                </div>
+
+                <!-- Botón visual -->
+                <div class="flex items-center justify-between pt-2">
+                  <span class="text-emerald-300 text-sm font-semibold group-hover:text-emerald-200 transition-colors">
+                    Responder ahora
+                  </span>
+                  <div class="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center group-hover:bg-emerald-500/40 transition-all">
+                    <svg class="w-4 h-4 text-emerald-300 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="!cargando && encuestas.length === 0" class="text-center py-20">
+      <div class="relative inline-block mb-8">
+        <div class="absolute inset-0 bg-gradient-to-r from-sky-400 to-emerald-400 rounded-full blur-xl opacity-30"></div>
+        <div class="relative w-32 h-32 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/20">
+          <svg class="w-16 h-16 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+      </div>
+
+      <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">
+        No hay encuestas disponibles
+      </h3>
+      <p class="text-white/60 text-lg mb-8 max-w-md mx-auto">
+        En este momento no tienes encuestas asignadas para responder
+      </p>
+
+      <!-- Botón decorativo -->
+      <div class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full border border-white/20">
+        <div class="w-2 h-2 bg-sky-400 rounded-full animate-pulse"></div>
+        <span class="text-white/70 text-sm font-medium">Vuelve más tarde para nuevas encuestas</span>
+      </div>
+    </div>
+
+  </div>
+</div>
