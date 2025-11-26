@@ -35,7 +35,7 @@ import { Encuesta } from '../../../interfaces/Encuestas.interface';
 export default class EncuestaComponent {
 
   public encuesta: Encuesta;
-  public respuestasSeleccionadas: Map<number, number> = new Map();
+  public respuestasSeleccionadas: Map<number, Set<number>> = new Map();
   public enviando: boolean = false;
   public encuestaCompletada: boolean = false;
   public cargandoEncuesta: boolean = true;
@@ -119,8 +119,14 @@ export default class EncuestaComponent {
       // Filtrar solo respuestas activas y ordenarlas
       this.encuesta.Preguntas.forEach((pregunta: any) => {
         if (pregunta.Respuestas) {
-          // Filtrar solo respuestas activas
-          pregunta.Respuestas = pregunta.Respuestas.filter((r: any) => !!r.activo);
+          // Filtrar solo respuestas activas Y que tengan ID válido
+          pregunta.Respuestas = pregunta.Respuestas.filter((r: any) => {
+            const tieneId = r.id !== undefined && r.id !== null && !isNaN(r.id);
+            if (!tieneId) {
+              console.error('Respuesta sin ID válido detectada:', r, 'en pregunta:', pregunta.id);
+            }
+            return !!r.activo && tieneId;
+          });
           // Ordenar respuestas por el campo orden
           pregunta.Respuestas.sort((a: any, b: any) => a.orden - b.orden);
         }
@@ -128,12 +134,38 @@ export default class EncuestaComponent {
     }
   }
 
-  seleccionarRespuesta(preguntaId: number, respuestaId: number): void {
-    this.respuestasSeleccionadas.set(preguntaId, respuestaId);
+  seleccionarRespuesta(preguntaId: number, respuestaId: number, multiplesRespuestas: boolean): void {
+    // Validar que preguntaId y respuestaId sean válidos
+    if (!preguntaId || !respuestaId || isNaN(preguntaId) || isNaN(respuestaId)) {
+      console.error('IDs inválidos:', { preguntaId, respuestaId });
+      return;
+    }
+
+    if (multiplesRespuestas) {
+      // Para preguntas con múltiples respuestas, usar checkbox
+      if (!this.respuestasSeleccionadas.has(preguntaId)) {
+        this.respuestasSeleccionadas.set(preguntaId, new Set());
+      }
+      const respuestas = this.respuestasSeleccionadas.get(preguntaId)!;
+
+      if (respuestas.has(respuestaId)) {
+        respuestas.delete(respuestaId);
+        // Si el Set queda vacío, eliminar la entrada del Map
+        if (respuestas.size === 0) {
+          this.respuestasSeleccionadas.delete(preguntaId);
+        }
+      } else {
+        respuestas.add(respuestaId);
+      }
+    } else {
+      // Para preguntas de respuesta única, usar radio
+      this.respuestasSeleccionadas.set(preguntaId, new Set([respuestaId]));
+    }
   }
 
   verificarRespuestaSeleccionada(preguntaId: number, respuestaId: number): boolean {
-    return this.respuestasSeleccionadas.get(preguntaId) === respuestaId;
+    const respuestas = this.respuestasSeleccionadas.get(preguntaId);
+    return respuestas ? respuestas.has(respuestaId) : false;
   }
 
   todasLasPreguntasRespondidas(): boolean {
@@ -180,11 +212,22 @@ export default class EncuestaComponent {
     this.enviando = true;
     this.alertService.loading();
 
-    // Convertir el Map a un array de objetos {preguntaId, respuestaId}
-    const respuestas = Array.from(this.respuestasSeleccionadas.entries()).map(([preguntaId, respuestaId]) => ({
+    // Convertir el Map<number, Set<number>> a un array de objetos {preguntaId, respuestaIds[]}
+    // Filtrar valores undefined, null o inválidos
+    const respuestas = Array.from(this.respuestasSeleccionadas.entries()).map(([preguntaId, respuestaIds]) => ({
       preguntaId,
-      respuestaId
+      respuestaIds: Array.from(respuestaIds).filter(id => id !== undefined && id !== null && !isNaN(id))
     }));
+
+    // Validación adicional: verificar que todas las preguntas tienen al menos una respuesta
+    const respuestasInvalidas = respuestas.filter(r => r.respuestaIds.length === 0);
+    if (respuestasInvalidas.length > 0) {
+      this.enviando = false;
+      this.alertService.close();
+      this.alertService.errorApi('Error al procesar las respuestas. Por favor intenta nuevamente.');
+      console.error('Respuestas sin IDs válidos:', respuestasInvalidas);
+      return;
+    }
 
     // Enviar todas las respuestas en una sola petición incluyendo datos personales
     this.encuestasService.responderEncuesta(
@@ -309,36 +352,60 @@ export default class EncuestaComponent {
 
   getCardClasses(preguntaId: number): string {
     const answered = this.respuestasSeleccionadas.has(preguntaId);
-    const border = answered ? 'border-emerald-400/50 shadow-emerald-500/30' : 'border-gray-200';
-    return `relative backdrop-blur-md rounded-2xl border-2 p-6 transition-all duration-500 shadow-xl bg-white/90 ${border}`;
+    const pregunta: any = this.encuesta?.Preguntas?.find(p => p.id === preguntaId);
+    const isMultiple = pregunta?.multiplesRespuestas;
+
+    let border = 'border-gray-200';
+    if (answered) {
+      border = isMultiple ? 'border-purple-400/50 shadow-purple-500/30' : 'border-emerald-400/50 shadow-emerald-500/30';
+    }
+
+    return `relative backdrop-blur-md rounded-xl sm:rounded-2xl border-2 p-4 sm:p-5 md:p-6 transition-all duration-500 shadow-xl bg-white/90 ${border}`;
   }
 
   getBadgeClasses(preguntaId: number): string {
     const answered = this.respuestasSeleccionadas.has(preguntaId);
-    const bg = answered ? 'bg-gradient-to-br from-emerald-500 to-teal-600 scale-110' : 'bg-gray-300';
-    return `w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-all duration-300 ${bg}`;
+    const pregunta: any = this.encuesta?.Preguntas?.find(p => p.id === preguntaId);
+    const isMultiple = pregunta?.multiplesRespuestas;
+
+    let bg = 'bg-gray-300';
+    if (answered) {
+      bg = isMultiple ? 'bg-gradient-to-br from-purple-500 to-purple-700 scale-110' : 'bg-gradient-to-br from-emerald-500 to-teal-600 scale-110';
+    }
+
+    return `w-10 h-10 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold shadow-lg transition-all duration-300 ${bg}`;
   }
 
   getAnswerClasses(preguntaId: number, respuestaId: number): string {
     const selected = this.verificarRespuestaSeleccionada(preguntaId, respuestaId);
+    // Verificar si la pregunta permite múltiples respuestas
+    const pregunta: any = this.encuesta?.Preguntas?.find(p => p.id === preguntaId);
+    const isMultiple = pregunta?.multiplesRespuestas;
+
     if (selected) {
-      return 'flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 border-emerald-400 bg-emerald-500/20 shadow-lg shadow-emerald-500/30';
+      if (isMultiple) {
+        // Estilo púrpura para múltiples respuestas
+        return 'flex items-center p-3 sm:p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 active:scale-95 sm:hover:scale-105 border-purple-400 bg-purple-500/20 shadow-lg shadow-purple-500/30';
+      } else {
+        // Estilo verde para respuesta única
+        return 'flex items-center p-3 sm:p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 active:scale-95 sm:hover:scale-105 border-emerald-400 bg-emerald-500/20 shadow-lg shadow-emerald-500/30';
+      }
     }
-    return 'flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 hover:scale-105 border-gray-300 bg-gray-50 hover:bg-gray-100';
+    return 'flex items-center p-3 sm:p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 active:scale-95 sm:hover:scale-105 border-gray-300 bg-gray-50 hover:bg-gray-100';
   }
 
   getAnswerTextClasses(preguntaId: number, respuestaId: number): string {
     const selected = this.verificarRespuestaSeleccionada(preguntaId, respuestaId);
     const textColor = selected ? 'text-slate-800 font-semibold' : 'text-slate-600';
-    return `ml-3 flex-1 transition-colors duration-500 ${textColor}`;
+    return `ml-2 sm:ml-3 flex-1 transition-colors duration-500 text-sm sm:text-base ${textColor}`;
   }
 
   getSubmitButtonClasses(): string {
     const canSubmit = this.formularioCompleto() && !this.enviando;
     if (canSubmit) {
-      return 'w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 border-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/50 hover:shadow-xl hover:scale-105 border-emerald-400';
+      return 'w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 border-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-lg shadow-emerald-500/50 active:scale-95 sm:hover:shadow-xl sm:hover:scale-105 border-emerald-400';
     }
-    return 'w-full py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 border-2 cursor-not-allowed bg-gray-200 text-gray-400 border-gray-300';
+    return 'w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 sm:gap-3 border-2 cursor-not-allowed bg-gray-200 text-gray-400 border-gray-300';
   }
 
   volver(): void {

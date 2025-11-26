@@ -191,7 +191,7 @@
                         </span>
                         <div class="flex-1">
                             <h3 class="text-lg font-bold text-gray-800 mb-2">{{ pregunta.pregunta }}</h3>
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2 flex-wrap">
                                 <div class="flex items-center gap-2 bg-purple-100 px-3 py-1.5 rounded-lg border border-purple-200">
                                     <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -203,6 +203,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
                                     </svg>
                                     <span class="text-sm font-bold text-blue-800">{{ pregunta.respuestas.length }} opciones</span>
+                                </div>
+                                <div *ngIf="pregunta.multiplesRespuestas" class="flex items-center gap-2 bg-gradient-to-r from-purple-100 to-indigo-100 px-3 py-1.5 rounded-lg border border-purple-300">
+                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="text-sm font-bold text-purple-800">Múltiples respuestas</span>
                                 </div>
                             </div>
                         </div>

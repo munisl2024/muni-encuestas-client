@@ -170,7 +170,7 @@ export class EncuestasService {
   responderEncuesta(
     encuestaId: string,
     usuarioId: number,
-    respuestas: Array<{ preguntaId: number; respuestaId: number }>,
+    respuestas: any,
     datosPersonales?: { email: string; sigem: boolean; genero: string; telefono: string; rangoEdad: string }
   ): Observable<any> {
     return this.http.post(`${urlApi}/${encuestaId}/responder`, {
