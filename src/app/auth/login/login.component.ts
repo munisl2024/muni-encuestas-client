@@ -48,7 +48,7 @@ export default class LoginComponent implements OnInit {
     tl.from('.gsap-logo', {
       scale: 0.5,
       opacity: 0,
-      duration: 0.8,
+      duration: 0.4,
       ease: 'back.out(1.7)'
     });
 
@@ -56,31 +56,31 @@ export default class LoginComponent implements OnInit {
     tl.from('.gsap-formulario', {
       y: 50,
       opacity: 0,
-      duration: 0.6
-    }, '-=0.3');
+      duration: 0.3
+    }, '-=0.2');
 
     // Animar campos del formulario uno por uno
     tl.from('.gsap-formulario form > div', {
       x: -30,
       opacity: 0,
-      duration: 0.4,
-      stagger: 0.1
-    }, '-=0.2');
+      duration: 0.25,
+      stagger: 0.05
+    }, '-=0.15');
 
     // Animar botón
     tl.from('.gsap-formulario button[type="submit"]', {
       scale: 0.9,
       opacity: 0,
-      duration: 0.5,
+      duration: 0.3,
       ease: 'back.out(1.4)'
-    }, '-=0.3');
+    }, '-=0.2');
 
     // Animar footer
     tl.from('.gsap-footer', {
       y: 20,
       opacity: 0,
-      duration: 0.4
-    }, '-=0.2');
+      duration: 0.25
+    }, '-=0.15');
   }
 
   login(): void {

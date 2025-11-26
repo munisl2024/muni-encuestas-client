@@ -3,23 +3,23 @@
 
   <!-- Patrón animado de fondo -->
   <div class="absolute inset-0 opacity-10">
-    <div class="absolute top-0 left-0 w-96 h-96 bg-sky-400 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-emerald-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute top-0 left-0 w-64 h-64 sm:w-96 sm:h-96 bg-sky-400 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-emerald-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-teal-400 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
   </div>
 
   <!-- Grid pattern sutil -->
   <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-5"></div>
 
   <!-- Contenedor principal -->
-  <div class="relative z-10 flex flex-col justify-center items-center w-full h-full px-4">
+  <div class="relative z-10 flex flex-col justify-center items-center w-full h-full px-4 sm:px-6 py-8">
 
     <!-- Logo animado -->
-    <div class="gsap-logo mb-8">
+    <div class="gsap-logo mb-6 sm:mb-8">
       <div class="relative group">
-        <div class="absolute inset-0 bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 rounded-3xl blur-2xl opacity-50 group-hover:opacity-75 animate-pulse transition-all duration-500"></div>
-        <div class="relative p-6 bg-white/10 backdrop-blur-xl rounded-3xl border-2 border-white/30 shadow-2xl group-hover:scale-105 transition-all duration-500">
-          <img src="assets/svg/muni-encuestas-logo.svg" class="w-24 group-hover:rotate-6 transition-transform duration-500" alt="Muni-Encuestas Logo">
+        <div class="absolute inset-0 bg-gradient-to-r from-sky-400 via-teal-400 to-emerald-400 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl opacity-50 group-hover:opacity-75 animate-pulse transition-all duration-500"></div>
+        <div class="relative p-4 sm:p-6 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl border-2 border-white/30 shadow-2xl group-hover:scale-105 transition-all duration-500">
+          <img src="assets/svg/muni-encuestas-logo.svg" class="w-16 sm:w-20 md:w-24 group-hover:rotate-6 transition-transform duration-500" alt="Muni-Encuestas Logo">
         </div>
       </div>
     </div>
@@ -27,36 +27,36 @@
     <!-- Formulario de login -->
     <div class="gsap-formulario w-full max-w-md">
       <form autocomplete="off" [formGroup]="loginForm" (submit)="login()"
-        class="relative p-8 md:p-10 rounded-3xl bg-white/10 backdrop-blur-2xl border-2 border-white/20 shadow-2xl">
+        class="relative p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-white/10 backdrop-blur-2xl border-2 border-white/20 shadow-2xl">
 
-        <!-- Efectos decorativos -->
-        <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-sky-400/20 to-transparent rounded-full blur-2xl"></div>
-        <div class="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-2xl"></div>
+        <!-- Efectos decorativos - Ocultos en móviles pequeños -->
+        <div class="hidden sm:block absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-sky-400/20 to-transparent rounded-full blur-2xl"></div>
+        <div class="hidden sm:block absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-2xl"></div>
 
         <!-- Título -->
-        <div class="relative text-center mb-8">
-          <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-sky-200 via-teal-200 to-emerald-200 bg-clip-text text-transparent mb-2">
+        <div class="relative text-center mb-6 sm:mb-8">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-sky-200 via-teal-200 to-emerald-200 bg-clip-text text-transparent mb-2">
             Bienvenido
           </h1>
-          <p class="text-white/80 text-lg font-medium">Sistema Municipal de Encuestas</p>
-          <p class="text-emerald-300 text-sm mt-1">Versión 1.0.0</p>
+          <p class="text-white/80 text-base sm:text-lg font-medium">Sistema Municipal de Encuestas</p>
+          <p class="text-emerald-300 text-xs sm:text-sm mt-1">Versión 1.0.0</p>
         </div>
 
         <!-- Campo Usuario -->
-        <div class="relative mb-6 group">
-          <label class="block text-white/70 text-sm font-medium mb-2 group-focus-within:text-emerald-300 transition-colors">
+        <div class="relative mb-5 sm:mb-6 group">
+          <label class="block text-white/70 text-xs sm:text-sm font-medium mb-2 group-focus-within:text-emerald-300 transition-colors">
             Usuario
           </label>
           <div class="relative">
-            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50 group-focus-within:text-emerald-400 transition-colors">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-white/50 group-focus-within:text-emerald-400 transition-colors">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
             <input
               type="text"
               formControlName="username"
-              class="w-full pl-12 pr-4 py-3.5 bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl text-white placeholder-white/40 outline-none focus:border-emerald-400 focus:bg-white/15 focus:ring-2 focus:ring-emerald-400/50 transition-all duration-300"
+              class="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 text-sm sm:text-base bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl text-white placeholder-white/40 outline-none focus:border-emerald-400 focus:bg-white/15 focus:ring-2 focus:ring-emerald-400/50 transition-all duration-300"
               placeholder="Ingrese su usuario"
             />
           </div>
@@ -66,13 +66,13 @@
         </div>
 
         <!-- Campo Contraseña -->
-        <div class="relative mb-8 group">
-          <label class="block text-white/70 text-sm font-medium mb-2 group-focus-within:text-emerald-300 transition-colors">
+        <div class="relative mb-6 sm:mb-8 group">
+          <label class="block text-white/70 text-xs sm:text-sm font-medium mb-2 group-focus-within:text-emerald-300 transition-colors">
             Contraseña
           </label>
           <div class="relative">
-            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white/50 group-focus-within:text-emerald-400 transition-colors">
-              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <div class="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-white/50 group-focus-within:text-emerald-400 transition-colors">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
               </svg>
             </div>
@@ -80,7 +80,7 @@
               type="password"
               autocomplete="false"
               formControlName="password"
-              class="w-full pl-12 pr-4 py-3.5 bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl text-white placeholder-white/40 outline-none focus:border-emerald-400 focus:bg-white/15 focus:ring-2 focus:ring-emerald-400/50 transition-all duration-300"
+              class="w-full pl-10 sm:pl-12 pr-4 py-3 sm:py-3.5 text-sm sm:text-base bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-xl text-white placeholder-white/40 outline-none focus:border-emerald-400 focus:bg-white/15 focus:ring-2 focus:ring-emerald-400/50 transition-all duration-300"
               placeholder="Ingrese su contraseña"
             />
           </div>
@@ -93,15 +93,15 @@
         <button
           type="submit"
           [disabled]="loginForm.invalid"
-          class="w-full py-4 px-6 rounded-xl font-bold text-lg text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 cursor-pointer hover:from-emerald-600 hover:via-teal-600 hover:to-sky-600 shadow-lg hover:shadow-2xl hover:shadow-emerald-500/50 hover:scale-[1.02] flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          class="w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-base sm:text-lg text-white bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 cursor-pointer hover:from-emerald-600 hover:via-teal-600 hover:to-sky-600 shadow-lg hover:shadow-2xl hover:shadow-emerald-500/50 active:scale-[0.98] sm:hover:scale-[1.02] flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
           </svg>
           <span>Ingresar al Sistema</span>
         </button>
 
         <!-- Información adicional -->
-        <div class="mt-8 text-center">
+        <div class="mt-6 sm:mt-8 text-center">
           <div class="flex items-center justify-center gap-2 text-white/60 text-xs">
             <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
             <span>Sistema seguro y encriptado</span>
@@ -112,8 +112,8 @@
     </div>
 
     <!-- Footer -->
-    <div class="gsap-footer mt-8 text-center">
-      <p class="text-white/50 text-sm">
+    <div class="gsap-footer mt-6 sm:mt-8 text-center px-4">
+      <p class="text-white/50 text-xs sm:text-sm">
         © 2025 Municipalidad - Todos los derechos reservados
       </p>
     </div>

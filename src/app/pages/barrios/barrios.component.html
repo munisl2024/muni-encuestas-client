@@ -50,14 +50,14 @@
                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden">
 
                 <!-- Opción: Nuevo Barrio -->
-                <!-- <button *ngIf="authService.isAdmin" [routerLink]="['/dashboard/barrios/crear']"
+                <button *ngIf="authService.isAdmin" [routerLink]="['/dashboard/barrios/crear']"
                   (click)="cerrarDropdownAcciones()"
                   class="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors duration-150 border-b border-gray-100">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-green-600">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                   </svg>
                   <span class="font-medium text-gray-700">Nuevo barrio</span>
-                </button> -->
+                </button>
 
                 <!-- Opción: Geolocalización -->
                 <button [routerLink]="['/dashboard/barrios/geolocalizacion']"
@@ -180,10 +180,10 @@
               </td>
               <td class="td-tabla">
                 <div class="flex items-center justify-center space-x-2">
-                  <!-- <button *ngIf="authService.isAdmin" (click)="abrirAbm('editar', barrio)" class="boton-tabla-editar" title="Editar barrio">
+                  <button *ngIf="authService.isAdmin" (click)="abrirAbm('editar', barrio)" class="boton-tabla-editar" title="Editar barrio">
                     <img src="assets/svg/editar.svg" class="w-4 h-4">
                     <span class="ml-2 font-medium"> Editar </span>
-                  </button> -->
+                  </button>
                   <button [routerLink]="['/dashboard/barrios/detalles', barrio.id]" class="boton-tabla-detalles"
                     title="Ver detalles del barrio">
                     <img src="assets/svg/detalles.svg" class="w-4 h-4">

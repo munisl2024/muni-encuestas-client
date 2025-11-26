@@ -14,6 +14,7 @@ export interface Encuesta {
     id: number;
     encuestaId: number;
     descripcion: string;
+    multiplesRespuestas: boolean;
     creatorUserId: number;
     Respuestas: Respuesta[];
   }

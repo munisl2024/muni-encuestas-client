@@ -16,6 +16,7 @@ export class PreguntasService {
     estado: 'crear',
     form: {
       descripcion: '',
+      multiplesRespuestas: false,
       respuestas: [
         {
           descripcion: '',
@@ -46,6 +47,7 @@ export class PreguntasService {
     if(estado === 'editar'){
       this.abmPregunta.form = {
         descripcion: pregunta.descripcion,
+        multiplesRespuestas: pregunta.multiplesRespuestas || false,
         respuestas: []
       }
 
@@ -58,6 +60,7 @@ export class PreguntasService {
     }else{
       this.abmPregunta.form = {
         descripcion: '',
+        multiplesRespuestas: false,
         respuestas: [
           {
             descripcion: '',

@@ -49,6 +49,7 @@ export default class AbmPreguntasComponent {
         this.alertService.loading();
         const data = {
           descripcion: this.preguntasService.abmPregunta.form.descripcion,
+          multiplesRespuestas: this.preguntasService.abmPregunta.form.multiplesRespuestas,
           encuestaId: this.preguntasService.abmPregunta.encuestaSeleccionada.id,
           respuestas: this.preguntasService.abmPregunta.form.respuestas,
           creatorUserId: this.authService.usuario.userId,
@@ -79,10 +80,11 @@ export default class AbmPreguntasComponent {
     .then( ({ isConfirmed }) => {
       if(isConfirmed){
         this.alertService.loading();
-        
+
         const data = {
           encuestaId: this.preguntasService.abmPregunta.encuestaSeleccionada.id,
           descripcion: this.preguntasService.abmPregunta.form.descripcion,
+          multiplesRespuestas: this.preguntasService.abmPregunta.form.multiplesRespuestas,
           respuestas: this.preguntasService.abmPregunta.form.respuestas,
           creatorUserId: this.authService.usuario.userId,
         }

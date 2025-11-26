@@ -16,13 +16,32 @@
     <div class="p-6 max-h-96 overflow-y-auto">
         
         <div>
-            <label for="descripcion" class="label-generico">Descripción <span class="text-red-500">*</span></label>
+            <label for="descripcion" class="label-generico"> Pregunta <span class="text-red-500">*</span></label>
             <input type="text" id="descripcion" class="input-generico mt-2"
                 placeholder="Ingrese aqui su pregunta" [(ngModel)]="preguntasService.abmPregunta.form.descripcion" />
         </div>
 
+        <!-- Checkbox para múltiples respuestas -->
+        <div class="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+            <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox"
+                    [(ngModel)]="preguntasService.abmPregunta.form.multiplesRespuestas"
+                    class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 focus:ring-2" />
+                <div class="flex-1">
+                    <span class="text-sm font-semibold text-gray-800 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Permitir múltiples respuestas
+                    </span>
+                    <p class="text-xs text-gray-600 mt-1">Los usuarios podrán seleccionar más de una opción</p>
+                </div>
+            </label>
+        </div>
+
         <div class="mt-3">
-            <p for="descripcion" class="label-generico"> Preguntas <span class="text-red-500">*</span></p>
+            <p for="descripcion" class="label-generico"> Respuestas <span class="text-red-500">*</span></p>
             <div class="mb-1" *ngFor="let respuesta of preguntasService.abmPregunta.form.respuestas; let i = index">
                 <div class="flex items-center gap-2">
                     <input type="text" class="border-b border-gray-200 text-sm w-full p-2 mt-2"
