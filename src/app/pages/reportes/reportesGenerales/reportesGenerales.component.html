@@ -1,0 +1,303 @@
+<div class="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
+
+    <!-- Header: Navegación -->
+    <div class="mb-4 sm:mb-6">
+        <button [routerLink]="['/dashboard/encuestas/detalles', idEncuesta]"
+            class="flex items-center bg-white gap-2 px-3 sm:px-4 py-2 hover:bg-indigo-50 text-gray-700 rounded-lg transition-colors border border-gray-300 duration-200 text-sm sm:text-base">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            <span class="font-medium">Regresar</span>
+        </button>
+    </div>
+
+    <!-- Título -->
+    <div class="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div class="text-center">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Reportes y Estadísticas</h1>
+            </div>
+            <p *ngIf="encuesta" class="text-sm sm:text-base text-gray-600 mb-2">{{ encuesta?.titulo }}</p>
+            <span *ngIf="encuesta" class="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold mb-4"
+                [ngClass]="encuesta?.estado === 'Activa' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'">
+                {{ encuesta?.estado }}
+            </span>
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                <a [routerLink]="['/dashboard/reportes/preguntas-respondidas', idEncuesta]"
+                    class="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-all duration-200 shadow hover:shadow-lg text-sm sm:text-base font-semibold">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                    <span>Ver Respuestas Detalladas</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros de fecha -->
+    <div class="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2">
+                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filtrar por fecha
+            </h2>
+            <button (click)="mostrarFiltros = !mostrarFiltros"
+                class="text-purple-500 hover:text-purple-600 text-sm font-medium">
+                {{ mostrarFiltros ? 'Ocultar' : 'Mostrar' }}
+            </button>
+        </div>
+
+        <div *ngIf="mostrarFiltros" class="space-y-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Fecha inicio</label>
+                    <input type="date" [(ngModel)]="fechaInicio"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Fecha fin</label>
+                    <input type="date" [(ngModel)]="fechaFin"
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button (click)="aplicarFiltros()" [disabled]="cargando"
+                    class="px-4 py-2 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 font-medium text-sm">
+                    {{ cargando ? 'Cargando...' : 'Buscar' }}
+                </button>
+                <button *ngIf="filtrosActivos" (click)="limpiarFiltros()" [disabled]="cargando"
+                    class="px-4 py-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 font-medium text-sm">
+                    Limpiar
+                </button>
+            </div>
+            <p *ngIf="filtrosActivos" class="text-xs text-gray-600 bg-purple-50 px-3 py-2 rounded border border-purple-200">
+                Mostrando resultados del {{ fechaInicio || '...' }} al {{ fechaFin || '...' }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="bg-white rounded-lg shadow border border-gray-200 p-8 text-center">
+        <div class="flex flex-col items-center gap-3">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+            <p class="text-gray-600 font-medium">Cargando estadísticas...</p>
+        </div>
+    </div>
+
+    <!-- Estadísticas Generales -->
+    <div *ngIf="!cargando && estadisticasGenerales" class="mb-4 sm:mb-6">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4 flex items-center gap-2">
+            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+            </svg>
+            Métricas Principales
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <!-- Total Respuestas -->
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow border border-blue-200 p-4 sm:p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs sm:text-sm text-blue-600 font-medium mb-1">Encuestas respondidas</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-blue-700">{{ estadisticasGenerales.totalRespuestas }}</p>
+                    </div>
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Total Preguntas -->
+            <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg shadow border border-green-200 p-4 sm:p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs sm:text-sm text-green-600 font-medium mb-1">Total Preguntas</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-green-700">{{ estadisticasGenerales.totalPreguntas }}</p>
+                    </div>
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Preguntas Respondidas -->
+            <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg shadow border border-orange-200 p-4 sm:p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs sm:text-sm text-orange-600 font-medium mb-1">Preguntas Respondidas</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-orange-700">{{ estadisticasGenerales.totalPreguntasRespondidas }}</p>
+                    </div>
+                    <svg class="w-10 h-10 sm:w-12 sm:h-12 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Distribución de Respuestas -->
+    <div *ngIf="!cargando && distribucionPreguntas.length > 0" class="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2">
+                <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                </svg>
+                Distribución de Respuestas
+            </h2>
+            <button (click)="toggleDistribucion()"
+                class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white rounded text-sm font-medium transition-colors">
+                {{ mostrarDistribucion ? 'Ocultar' : 'Mostrar' }}
+            </button>
+        </div>
+
+        <div *ngIf="mostrarDistribucion" class="space-y-6">
+            <div *ngFor="let pregunta of distribucionPreguntas" class="border-b border-gray-200 pb-6 last:border-b-0">
+                <div class="mb-3">
+                    <h3 class="text-sm sm:text-base font-semibold text-gray-800 mb-1">{{ pregunta.descripcion }}</h3>
+                    <p class="text-xs text-gray-500">Total de votos: <span class="font-semibold">{{ pregunta.totalVotos }}</span></p>
+                </div>
+                <div class="space-y-2">
+                    <div *ngFor="let respuesta of pregunta.respuestas" class="space-y-1">
+                        <div class="flex items-center justify-between text-xs sm:text-sm">
+                            <span class="text-gray-700">{{ respuesta.descripcion }}</span>
+                            <span class="font-semibold text-gray-800">{{ respuesta.votos }} ({{ respuesta.porcentaje }}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-purple-500 h-2 rounded-full transition-all duration-300"
+                                [style.width.%]="respuesta.porcentaje"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos Demográficos -->
+    <div *ngIf="!cargando && datosdemograficos && datosdemograficos.totalParticipantes > 0"
+        class="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2">
+                <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Datos Demográficos
+                <span class="text-gray-500 font-normal text-sm">({{ datosdemograficos.totalParticipantes }} participantes)</span>
+            </h2>
+            <button (click)="toggleDemografia()"
+                class="px-3 py-1.5 bg-purple-500 hover:bg-purple-600 text-white rounded text-sm font-medium transition-colors">
+                {{ mostrarDemografia ? 'Ocultar' : 'Mostrar' }}
+            </button>
+        </div>
+
+        <div *ngIf="mostrarDemografia" class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <!-- Distribución por Edad -->
+            <div *ngIf="datosdemograficos.distribucionEdad.length > 0">
+                <h3 class="text-sm font-semibold text-gray-800 mb-3">Por Rango de Edad</h3>
+                <div class="space-y-2">
+                    <div *ngFor="let edad of datosdemograficos.distribucionEdad" class="space-y-1">
+                        <div class="flex items-center justify-between text-xs sm:text-sm">
+                            <span class="text-gray-700">{{ edad.rango }}</span>
+                            <span class="font-semibold text-gray-800">{{ edad.cantidad }} ({{ edad.porcentaje }}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                [style.width.%]="edad.porcentaje"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distribución por Género -->
+            <div *ngIf="datosdemograficos.distribucionGenero.length > 0">
+                <h3 class="text-sm font-semibold text-gray-800 mb-3">Por Género</h3>
+                <div class="space-y-2">
+                    <div *ngFor="let genero of datosdemograficos.distribucionGenero" class="space-y-1">
+                        <div class="flex items-center justify-between text-xs sm:text-sm">
+                            <span class="text-gray-700">{{ genero.genero }}</span>
+                            <span class="font-semibold text-gray-800">{{ genero.cantidad }} ({{ genero.porcentaje }}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full transition-all duration-300"
+                                [style.width.%]="genero.porcentaje"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIGEM -->
+            <div>
+                <h3 class="text-sm font-semibold text-gray-800 mb-3">SIGEM</h3>
+                <div class="space-y-2">
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs sm:text-sm">
+                            <span class="text-gray-700">Sí</span>
+                            <span class="font-semibold text-gray-800">{{ datosdemograficos.sigem.si }} ({{ datosdemograficos.sigem.porcentajeSi }}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-teal-500 h-2 rounded-full transition-all duration-300"
+                                [style.width.%]="datosdemograficos.sigem.porcentajeSi"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between text-xs sm:text-sm">
+                            <span class="text-gray-700">No</span>
+                            <span class="font-semibold text-gray-800">{{ datosdemograficos.sigem.no }} ({{ datosdemograficos.sigem.porcentajeNo }}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-500 h-2 rounded-full transition-all duration-300"
+                                [style.width.%]="datosdemograficos.sigem.porcentajeNo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Distribución por Barrio (Top 5) -->
+            <div *ngIf="datosdemograficos.distribucionBarrio.length > 0">
+                <h3 class="text-sm font-semibold text-gray-800 mb-3">Por Barrio (Top 5)</h3>
+                <div class="space-y-2">
+                    <div *ngFor="let barrio of datosdemograficos.distribucionBarrio.slice(0, 5)" class="space-y-1">
+                        <div class="flex items-center justify-between text-xs sm:text-sm">
+                            <span class="text-gray-700 truncate mr-2">{{ barrio.barrio }}</span>
+                            <span class="font-semibold text-gray-800 flex-shrink-0">{{ barrio.cantidad }} ({{ barrio.porcentaje }}%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-pink-500 h-2 rounded-full transition-all duration-300"
+                                [style.width.%]="barrio.porcentaje"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="!cargando && !estadisticasGenerales" class="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+            <svg class="w-10 h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+        </div>
+        <p class="text-gray-600 text-lg font-semibold mb-2">No hay datos disponibles</p>
+        <p class="text-gray-500 text-sm">Esta encuesta aún no tiene respuestas registradas</p>
+    </div>
+
+</div>

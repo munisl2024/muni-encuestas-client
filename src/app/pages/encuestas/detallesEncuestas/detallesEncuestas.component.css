@@ -35,3 +35,29 @@
 .cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
+
+/* Mejoras para dispositivos táctiles */
+@media (max-width: 640px) {
+  /* Área de toque más grande para elementos drag & drop */
+  .cdk-drag-handle {
+    padding: 0.25rem;
+    margin: -0.25rem;
+  }
+
+  /* Mejorar el preview en móviles */
+  .cdk-drag-preview {
+    max-width: calc(100vw - 2rem);
+  }
+
+  /* Asegurar que los botones sean fáciles de tocar */
+  button {
+    min-height: 36px;
+    min-width: 36px;
+  }
+
+  /* Evitar zoom en inputs en iOS */
+  input[type="datetime-local"],
+  select {
+    font-size: 16px;
+  }
+}

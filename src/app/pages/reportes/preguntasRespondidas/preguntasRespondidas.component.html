@@ -1,0 +1,291 @@
+<div class="container mx-auto px-3 sm:px-4 py-4 sm:py-6">
+
+    <!-- Header: Navegación -->
+    <div class="mb-4 sm:mb-6">
+        <button [routerLink]="['/dashboard/reportes/generales', idEncuesta]"
+            class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-white hover:bg-indigo-50 text-gray-700 rounded-lg transition-colors border border-gray-300 duration-200 text-sm sm:text-base">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            <span class="font-medium">Volver a Reportes</span>
+        </button>
+    </div>
+
+    <!-- Título -->
+    <div class="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div class="text-center">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <svg class="w-6 h-6 sm:w-8 sm:h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">Respuestas Detalladas</h1>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                <p class="text-sm sm:text-base text-gray-600">Mostrando {{ respuestasAgrupadas.length }} de {{ total }} respuestas</p>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs sm:text-sm text-gray-600 font-medium">Mostrar:</label>
+                    <select [(ngModel)]="itemsPorPagina" (ngModelChange)="cambiarItemsPorPagina()"
+                        class="px-2 py-1 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        <option [value]="5">5</option>
+                        <option [value]="10">10</option>
+                        <option [value]="20">20</option>
+                        <option [value]="50">50</option>
+                        <option [value]="100">100</option>
+                    </select>
+                    <span class="text-xs sm:text-sm text-gray-600">por página</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="bg-white rounded-lg shadow border border-gray-200 p-4 sm:p-6 mb-4 sm:mb-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2">
+                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filtros de Búsqueda
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-4">
+            <!-- Filtro por Encuestador -->
+            <div *ngIf="encuestadores.length > 1">
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Encuestador</label>
+                <select [(ngModel)]="encuestadorSeleccionado"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option [ngValue]="null">Todos</option>
+                    <option *ngFor="let encuestador of encuestadores" [ngValue]="encuestador.id">
+                        {{ encuestador.nombre }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Filtro por Género -->
+            <div>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Género</label>
+                <select [(ngModel)]="generoSeleccionado"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option [ngValue]="null">Todos</option>
+                    <option [ngValue]="'Masculino'">Masculino</option>
+                    <option [ngValue]="'Femenino'">Femenino</option>
+                    <option [ngValue]="'Otro'">Otro</option>
+                </select>
+            </div>
+
+            <!-- Filtro por SIGEM -->
+            <div>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">SIGEM</label>
+                <select [(ngModel)]="sigemSeleccionado"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option [ngValue]="null">Todos</option>
+                    <option [ngValue]="true">Sí</option>
+                    <option [ngValue]="false">No</option>
+                </select>
+            </div>
+
+            <!-- Filtro por Fecha Inicio -->
+            <div>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Fecha Inicio</label>
+                <input type="date" [(ngModel)]="fechaInicio"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+
+            <!-- Filtro por Fecha Fin -->
+            <div>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">Fecha Fin</label>
+                <input type="date" [(ngModel)]="fechaFin"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex gap-2">
+            <button (click)="aplicarFiltros()" [disabled]="cargando"
+                class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 font-medium text-sm">
+                {{ cargando ? 'Cargando...' : 'Buscar' }}
+            </button>
+            <button *ngIf="hayFiltrosActivos" (click)="limpiarFiltros()" [disabled]="cargando"
+                class="px-4 py-2 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400 text-white rounded-lg transition-colors duration-200 font-medium text-sm">
+                Limpiar Filtros
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="bg-white rounded-lg shadow border border-gray-200 p-8 text-center">
+        <div class="flex flex-col items-center gap-3">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+            <p class="text-gray-600 font-medium">Cargando respuestas...</p>
+        </div>
+    </div>
+
+    <!-- Lista de respuestas -->
+    <div *ngIf="!cargando && respuestasAgrupadas.length > 0" class="space-y-3 sm:space-y-4">
+        <div *ngFor="let sesion of respuestasAgrupadas; let i = index"
+            class="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
+
+            <!-- Header de la sesión (siempre visible) -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-indigo-50 to-white border-b border-indigo-100 cursor-pointer hover:bg-indigo-50 transition-colors"
+                (click)="toggleExpansion(sesion.id)">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="inline-flex items-center justify-center w-8 h-8 bg-indigo-500 text-white rounded-full font-bold text-sm">
+                                {{ (paginaActual - 1) * itemsPorPagina + i + 1 }}
+                            </span>
+                            <h3 class="text-base sm:text-lg font-semibold text-gray-800">
+                                Respuesta
+                            </h3>
+                        </div>
+
+                        <!-- Información del encuestador y fecha -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-gray-600">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                                <span class="truncate"><strong>Encuestador:</strong> {{ sesion.encuestador.nombre }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <span><strong>Fecha:</strong> {{ sesion.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Datos del participante (resumen) -->
+                        <div *ngIf="sesion.participante" class="mt-2 flex flex-wrap gap-1.5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                {{ sesion.participante.rangoEdad }}
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                {{ sesion.participante.genero }}
+                            </span>
+                            <span *ngIf="sesion.participante.sigem" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+                                SIGEM
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Botón expandir/colapsar -->
+                    <button class="flex-shrink-0 p-2 hover:bg-indigo-100 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 text-indigo-600 transition-transform duration-200"
+                            [class.rotate-180]="estaExpandida(sesion.id)"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detalles expandibles -->
+            <div *ngIf="estaExpandida(sesion.id)" class="p-4 sm:p-5">
+
+                <!-- Datos completos del participante -->
+                <div *ngIf="sesion.participante" class="mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <h4 class="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        Datos del Participante
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                        <div *ngIf="sesion.participante.email">
+                            <span class="text-gray-600">Email:</span>
+                            <span class="ml-1 font-medium text-gray-800">{{ sesion.participante.email }}</span>
+                        </div>
+                        <div *ngIf="sesion.participante.telefono">
+                            <span class="text-gray-600">Teléfono:</span>
+                            <span class="ml-1 font-medium text-gray-800">{{ sesion.participante.telefono }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">Barrio:</span>
+                            <span class="ml-1 font-medium text-gray-800">{{ sesion.participante.barrio }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-600">SIGEM:</span>
+                            <span class="ml-1 font-medium"
+                                [class.text-green-600]="sesion.participante.sigem"
+                                [class.text-red-600]="!sesion.participante.sigem">
+                                {{ sesion.participante.sigem ? 'Sí' : 'No' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Respuestas -->
+                <div>
+                    <h4 class="text-sm font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Respuestas ({{ sesion.respuestas.length }})
+                    </h4>
+                    <div class="space-y-3">
+                        <div *ngFor="let respuesta of sesion.respuestas" class="border-l-4 border-indigo-400 pl-3 sm:pl-4">
+                            <p class="text-xs sm:text-sm font-medium text-gray-700 mb-1">{{ respuesta.pregunta }}</p>
+                            <p class="text-sm sm:text-base text-indigo-600 font-semibold">{{ respuesta.respuesta }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="!cargando && respuestasAgrupadas.length === 0" class="bg-white rounded-lg shadow border border-gray-200 p-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-4 bg-indigo-100 rounded-full flex items-center justify-center">
+            <svg class="w-10 h-10 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+            </svg>
+        </div>
+        <p class="text-gray-600 text-lg font-semibold mb-2">No hay respuestas</p>
+        <p class="text-gray-500 text-sm">Esta encuesta aún no tiene respuestas registradas</p>
+    </div>
+
+    <!-- Paginación -->
+    <div *ngIf="!cargando && totalPaginas > 1" class="bg-white rounded-lg shadow border border-gray-200 p-4 mt-4 sm:mt-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p class="text-sm text-gray-600">
+                Página <strong>{{ paginaActual }}</strong> de <strong>{{ totalPaginas }}</strong>
+            </p>
+            <div class="flex items-center gap-1 sm:gap-2">
+                <!-- Botón anterior -->
+                <button (click)="irAPagina(paginaActual - 1)" [disabled]="paginaActual === 1"
+                    class="px-3 py-1.5 rounded border border-gray-300 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50">
+                    Anterior
+                </button>
+
+                <!-- Números de página -->
+                <button *ngFor="let pagina of paginasVisibles" (click)="irAPagina(pagina)"
+                    class="w-9 h-9 rounded border text-sm font-medium transition-colors"
+                    [class.bg-indigo-500]="pagina === paginaActual"
+                    [class.text-white]="pagina === paginaActual"
+                    [class.border-indigo-500]="pagina === paginaActual"
+                    [class.border-gray-300]="pagina !== paginaActual"
+                    [class.hover:bg-gray-50]="pagina !== paginaActual">
+                    {{ pagina }}
+                </button>
+
+                <!-- Botón siguiente -->
+                <button (click)="irAPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas"
+                    class="px-3 py-1.5 rounded border border-gray-300 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50">
+                    Siguiente
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

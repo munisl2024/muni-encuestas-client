@@ -107,6 +107,18 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/reportes/reportes.component'),
       },
 
+      {
+        path: 'reportes/generales/:id',
+        title: 'Reportes Generales',
+        loadComponent: () => import('./pages/reportes/reportesGenerales/reportesGenerales.component'),
+      },
+
+      {
+        path: 'reportes/preguntas-respondidas/:id',
+        title: 'Preguntas Respondidas',
+        loadComponent: () => import('./pages/reportes/preguntasRespondidas/preguntasRespondidas.component'),
+      },
+
       // Barrios
 
       {
