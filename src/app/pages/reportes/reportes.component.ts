@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
 import { EncuestasService } from '../../services/encuestas.service';
+import { ReportesService } from '../../services/reportes.service';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -53,6 +54,7 @@ export default class ReportesComponent implements OnInit, AfterViewInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private encuestasService: EncuestasService,
+    private reportesService: ReportesService,
     private alertService: AlertService,
   ) { }
 
@@ -248,6 +250,46 @@ export default class ReportesComponent implements OnInit, AfterViewInit {
       },
       error: ({ error }) => {
         this.alertService.errorApi(error.message);
+      }
+    });
+  }
+
+  /**
+   * Descarga el reporte en formato PDF
+   */
+  descargarPDF(): void {
+    this.alertService.loading();
+
+    this.reportesService.descargarPDFReporte(
+      this.idEncuesta,
+      this.fechaInicio || undefined,
+      this.fechaFin || undefined
+    ).subscribe({
+      next: (blob: Blob) => {
+        // Crear URL temporal del blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Crear elemento <a> para descargar
+        const link = document.createElement('a');
+        link.href = url;
+        const timestamp = new Date().toISOString().split('T')[0];
+        link.download = `reporte-encuesta-${this.idEncuesta}-${timestamp}.pdf`;
+
+        // Hacer click programático
+        document.body.appendChild(link);
+        link.click();
+
+        // Limpiar
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        // Cerrar loading
+        this.alertService.close();
+        this.alertService.success('PDF descargado correctamente');
+      },
+      error: ({ error }) => {
+        this.alertService.close();
+        this.alertService.errorApi(error?.message || 'Error al generar el PDF');
       }
     });
   }

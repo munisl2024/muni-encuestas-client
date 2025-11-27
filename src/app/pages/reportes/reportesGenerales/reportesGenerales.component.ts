@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ReportesService } from '../../../services/reportes.service';
 import { AlertService } from '../../../services/alert.service';
+import { saveAs } from 'file-saver-es';
 
 @Component({
   selector: 'app-reportes-generales',
@@ -112,5 +113,27 @@ export default class ReportesGeneralesComponent implements OnInit {
    */
   toggleDemografia(): void {
     this.mostrarDemografia = !this.mostrarDemografia;
+  }
+
+  /**
+   * Descarga el reporte en formato PDF
+   */
+  descargarPDF(): void {
+    this.alertService.loading();
+    const fechaInicio = this.fechaInicio || undefined;
+    const fechaFin = this.fechaFin || undefined;
+
+    this.reportesService.descargarPDFReporte(this.idEncuesta, fechaInicio, fechaFin)
+      .subscribe({
+        next: (blob) => {
+          const nombreArchivo = `Reporte_Encuesta_${this.idEncuesta}_${new Date().toISOString().split('T')[0]}.pdf`;
+          saveAs(blob, nombreArchivo);
+          this.alertService.close();
+        },
+        error: ({ error }) => {
+          this.alertService.close();
+          this.alertService.errorApi(error?.message || 'Error al generar el PDF');
+        }
+      });
   }
 }

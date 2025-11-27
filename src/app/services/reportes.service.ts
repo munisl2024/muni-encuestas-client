@@ -55,4 +55,26 @@ export class ReportesService {
       headers: this.getToken
     });
   }
+
+  /**
+   * Genera y descarga un PDF con el reporte completo de la encuesta
+   * @param id ID de la encuesta
+   * @param fechaInicio Fecha inicio (YYYY-MM-DD) - opcional
+   * @param fechaFin Fecha fin (YYYY-MM-DD) - opcional
+   */
+  descargarPDFReporte(
+    id: string | number,
+    fechaInicio?: string,
+    fechaFin?: string
+  ): Observable<Blob> {
+    let params: any = {};
+    if (fechaInicio) params.fechaInicio = fechaInicio;
+    if (fechaFin) params.fechaFin = fechaFin;
+
+    return this.http.get(`${urlApi}/encuesta/${id}/pdf`, {
+      params,
+      headers: this.getToken,
+      responseType: 'blob'
+    });
+  }
 }
