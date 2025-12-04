@@ -5,7 +5,6 @@ import { AlertService } from '../../services/alert.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import gsap from 'gsap';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
@@ -37,7 +36,6 @@ export default class LoginComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private fb: FormBuilder,
-    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -89,7 +87,6 @@ export default class LoginComponent implements OnInit {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           this.alertService.close();
-          this.toastr.success('Muni encuestas', 'Bienvenido');
           this.router.navigateByUrl('/dashboard/home');
         }, error: ({ error }) => {
           this.loginForm.reset();

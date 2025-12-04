@@ -40,7 +40,6 @@ export class HeaderComponent implements OnInit {
       .then(({ isConfirmed }) => {
         if (isConfirmed) {
           this.authService.logout();
-          this.toastr.success('Hasta pronto', 'Sesión finalizada');
         }
       });
   }
